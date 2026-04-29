@@ -100,8 +100,10 @@ In Supabase **Authentication > URL Configuration**:
 - [ ] Site URL: your Vercel production URL.
 - [ ] Redirect URLs:
   - `http://localhost:3000`
+  - `http://localhost:3000/auth/confirm`
   - your Vercel preview URL pattern, if needed
   - your Vercel production URL
+  - `https://your-production-domain/auth/confirm`
 
 If email confirmation is enabled, test the signup email path before sharing the Alpha link.
 

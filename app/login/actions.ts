@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseRouteClient } from "@/lib/supabase/auth";
 
@@ -20,6 +21,20 @@ function buildRedirect(path: string, params: Record<string, string | undefined>)
 function readCredential(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
+}
+
+async function getRequestOrigin() {
+  const headersList = await headers();
+  const origin = headersList.get("origin");
+
+  if (origin) {
+    return origin;
+  }
+
+  const host = headersList.get("x-forwarded-host") ?? headersList.get("host");
+  const proto = headersList.get("x-forwarded-proto") ?? "https";
+
+  return host ? `${proto}://${host}` : "http://localhost:3000";
 }
 
 export async function login(formData: FormData) {
@@ -68,9 +83,13 @@ export async function signup(formData: FormData) {
   }
 
   const supabase = await createSupabaseRouteClient();
+  const origin = await getRequestOrigin();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${origin}/auth/confirm?next=/canvas`,
+    },
   });
 
   if (error) {
