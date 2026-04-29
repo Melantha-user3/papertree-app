@@ -4,6 +4,7 @@ import {
   ChartNoAxesCombined,
   FileText,
   GitBranch,
+  Mail,
   MessageCircle,
   LockKeyhole,
   Sparkles,
@@ -174,6 +175,13 @@ export default function HomePage() {
                 <MessageCircle className="h-4 w-4" />
                 Feedback
               </a>
+              <a
+                href="mailto:jinlongwan57@gmail.com?subject=PaperTree%20Alpha%20Feedback"
+                className="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950 md:inline-flex"
+              >
+                <Mail className="h-4 w-4" />
+                Email
+              </a>
               <Link
                 href="/login?mode=signin"
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950"
@@ -226,6 +234,13 @@ export default function HomePage() {
                   className="font-medium text-teal-700 underline-offset-4 hover:underline"
                 >
                   report a bug or suggestion
+                </a>
+                {" "}or email{" "}
+                <a
+                  href="mailto:jinlongwan57@gmail.com?subject=PaperTree%20Alpha%20Feedback"
+                  className="font-medium text-teal-700 underline-offset-4 hover:underline"
+                >
+                  jinlongwan57@gmail.com
                 </a>
               </p>
             </div>
