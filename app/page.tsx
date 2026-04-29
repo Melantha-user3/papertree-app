@@ -4,6 +4,7 @@ import {
   ChartNoAxesCombined,
   FileText,
   GitBranch,
+  MessageCircle,
   LockKeyhole,
   Sparkles,
 } from "lucide-react";
@@ -164,6 +165,15 @@ export default function HomePage() {
               <span className="text-base font-semibold text-slate-950">PaperTree</span>
             </Link>
             <nav className="flex items-center gap-2">
+              <a
+                href="https://github.com/Melantha-user3/papertree-app/issues"
+                target="_blank"
+                rel="noreferrer"
+                className="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950 sm:inline-flex"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Feedback
+              </a>
               <Link
                 href="/login?mode=signin"
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950"
@@ -206,6 +216,17 @@ export default function HomePage() {
               <p className="mt-6 flex max-w-xl items-start gap-2 text-sm leading-6 text-slate-500">
                 <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" />
                 User-scoped Supabase RLS. Local Ollama support available.
+              </p>
+              <p className="mt-3 text-sm leading-6 text-slate-500">
+                Alpha feedback:{" "}
+                <a
+                  href="https://github.com/Melantha-user3/papertree-app/issues"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-teal-700 underline-offset-4 hover:underline"
+                >
+                  report a bug or suggestion
+                </a>
               </p>
             </div>
 

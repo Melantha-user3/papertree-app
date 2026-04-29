@@ -4,6 +4,10 @@ PaperTree is an AI-powered literature graph workspace for turning research PDFs 
 
 It is designed for real research workflows: upload papers, inspect the PDF, map semantic relationships, track experimental parameters over time, and synthesize a defensible review from the papers you explicitly choose.
 
+**Live Demo:** [https://papertree-app-q9bj.vercel.app](https://papertree-app-q9bj.vercel.app)
+
+**Alpha Feedback:** [Open a GitHub issue](https://github.com/Melantha-user3/papertree-app/issues) for bugs, confusing flows, or research-workflow suggestions.
+
 ## Why PaperTree
 
 - **Visualize** PDF libraries as a project-scoped semantic graph.
