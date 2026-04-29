@@ -2,6 +2,11 @@
   "name": "papertree-app",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.11.0",
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
