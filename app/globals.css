@@ -1,26 +1,62 @@
 @import "tailwindcss";
+@import "@react-pdf-viewer/core/lib/styles/index.css";
+@import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #ffffff;
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.rpv-default-layout__main {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Ensure resize handles are easy to grab, even when canvas layers overlap */
+[data-group][aria-orientation="horizontal"] > [data-separator],
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle],
+.panel-resize-handle {
+  width: 8px !important;
+  min-width: 8px !important;
+  margin: 0 -4px;
+  background: transparent !important;
+  position: relative !important;
+  z-index: 50 !important;
+  cursor: col-resize !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+
+[data-group][aria-orientation="horizontal"] > [data-separator]::after,
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle]::after,
+.panel-resize-handle::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+[data-group][aria-orientation="horizontal"] > [data-separator="hover"]::after,
+[data-group][aria-orientation="horizontal"] > [data-separator]:hover::after,
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle][data-active="true"]::after,
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle]:hover::after,
+.panel-resize-handle:hover::after {
+  background-color: rgba(0, 0, 0, 0.22);
+}
+
+[data-group][aria-orientation="horizontal"] > [data-separator="drag"]::after,
+[data-panel-group-direction="horizontal"] > [data-panel-resize-handle][data-active="true"]::after {
+  background-color: #3b82f6;
 }

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title>PaperTree icon</title>
+  <rect width="512" height="512" rx="112" fill="#f8fafc"/>
+  <path d="M132 342c72-7 117-40 133-100 10-38 34-62 76-72" fill="none" stroke="#0f766e" stroke-width="28" stroke-linecap="round"/>
+  <path d="M166 178h166c24 0 44 20 44 44v120c0 24-20 44-44 44H166c-24 0-44-20-44-44V222c0-24 20-44 44-44Z" fill="#ffffff" stroke="#0f172a" stroke-width="18"/>
+  <path d="M178 236h142M178 284h116M178 332h74" stroke="#64748b" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="344" cy="170" r="36" fill="#14b8a6" stroke="#0f766e" stroke-width="14"/>
+  <circle cx="130" cy="344" r="30" fill="#38bdf8" stroke="#0369a1" stroke-width="14"/>
+</svg>

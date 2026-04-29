@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PaperTree
 
-## Getting Started
+PaperTree is an AI-powered literature graph workspace for turning research PDFs into a navigable paper tree, analyzing method evolution, and generating citation-ready literature reviews from locked semantic chains.
 
-First, run the development server:
+It is designed for real research workflows: upload papers, inspect the PDF, map semantic relationships, track experimental parameters over time, and synthesize a defensible review from the papers you explicitly choose.
+
+## Why PaperTree
+
+- **Visualize** PDF libraries as a project-scoped semantic graph.
+- **Synthesize** locked paper chains into Markdown, plain text, LaTeX, and BibTeX.
+- **Analyze** comparable experimental parameters across a research route.
+
+## Features
+
+- **Auth-protected workspace**: Supabase email/password auth with server-protected dashboard routes.
+- **Project isolation**: each user can create and switch between private literature projects.
+- **PDF upload pipeline**: validates PDF uploads, stores files in Supabase Storage, and reads them through signed URLs.
+- **Metadata and text extraction**: extracts title, year, page count, and text excerpts from uploaded PDFs.
+- **LLM analysis**: supports mock mode, local Ollama, and OpenAI-compatible remote providers such as DeepSeek, Qwen, and OpenAI.
+- **Academic filtering**: separates research papers from non-academic PDFs while keeping all files visible when needed.
+- **Graph canvas**: React Flow timeline canvas with paper nodes, semantic links, minimap, controls, and route lane labels.
+- **Lockable semantic edges**: suggested AI links can be confirmed and locked before synthesis.
+- **Synthesis Mode**: generates literature reviews from locked chains only, keeping the source set explicit.
+- **Parameter Dashboard**: extracts comparable metrics such as efficiency, PLQY, responsivity, and current density, then plots their evolution across a chain.
+- **PDF reader panel**: inspect the source PDF beside the graph and analysis details.
+- **Export-friendly outputs**: copy generated reviews as Markdown, TXT, LaTeX, or BibTeX.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 App Router, React 19, TypeScript
+- **UI**: Tailwind CSS 4, Framer Motion, Lucide icons
+- **Graph**: React Flow
+- **PDF**: pdfjs-dist, react-pdf, React PDF Viewer
+- **State**: Zustand
+- **Database/Auth/Storage**: Supabase
+- **AI**: OpenAI SDK against OpenAI-compatible APIs
+
+## Quick Start
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env.local
+```
+
+Fill in the Supabase values. To try the product flow without a model key, keep:
+
+```bash
+LLM_MODE=mock
+```
+
+For real model analysis, configure a remote OpenAI-compatible provider:
+
+```bash
+LLM_MODE=remote
+LLM_API_KEY=your-api-key
+LLM_BASE_URL=https://api.openai.com/v1
+LLM_MODEL=gpt-4o-mini
+```
+
+DeepSeek, Qwen/DashScope, OpenAI shortcuts, and local Ollama are documented in `.env.example`.
+
+### 3. Set up Supabase
+
+Follow [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md).
+
+At minimum, you need:
+
+- Supabase project URL
+- anon / publishable key
+- service role key
+- `papers` storage bucket
+- migrations from `supabase/migrations` applied in order
+
+### 4. Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. Validate production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+PaperTree requires a Node.js-capable Next.js deployment because it uses route handlers, authentication, file upload, PDF extraction, and LLM calls.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For the first private deployment, follow [docs/VERCEL_ALPHA_CHECKLIST.md](docs/VERCEL_ALPHA_CHECKLIST.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Recommended first deployment:
 
-## Deploy on Vercel
+1. Create a hosted Supabase project.
+2. Apply the migrations.
+3. Create the `papers` storage bucket.
+4. Deploy the Next.js app to Vercel or another Node.js host.
+5. Add all environment variables from `.env.example`.
+6. Use `LLM_MODE=mock` for a public demo, or `LLM_MODE=remote` for production analysis.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Static export is not appropriate for this project because PaperTree depends on server routes and protected runtime data.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## LLM Modes
+
+| Mode | Use case |
+| --- | --- |
+| `mock` | Demo mode with no external model key. Best for public previews and screenshots. |
+| `remote` | Production mode with an OpenAI-compatible hosted provider. |
+| `ollama` | Local development with an Ollama OpenAI-compatible endpoint. |
+| `auto` | Uses a detected remote API key when available, otherwise falls back to mock mode. |
+
+## Product Notes
+
+The current product is strongest as a Web + PWA-style research workspace. The three-panel layout is optimized for desktop and tablet-sized research workflows: project tree, graph canvas, and PDF reader stay visible at the same time.
+
+Future packaging options include:
+
+- hosted Web SaaS
+- GitHub self-hosted template
+- Docker deployment
+- PWA install support
+- Tauri desktop wrapper
+
+## License
+
+MIT
