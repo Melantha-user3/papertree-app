@@ -1,4 +1,4 @@
 {
-  "installCommand": "node scripts/check-install-metadata.mjs && npm install --loglevel verbose",
+  "installCommand": "npm install",
   "buildCommand": "npm run build"
 }
