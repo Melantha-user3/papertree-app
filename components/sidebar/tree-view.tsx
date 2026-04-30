@@ -9,6 +9,7 @@ import { usePaperTreeStore } from "@/lib/store/use-papertree-store";
 import type { PaperAnalysisStatus, PaperNodeRecord, ProjectRecord } from "@/lib/types/papertree";
 
 interface TreeViewProps {
+  isGuest?: boolean;
   onRefresh: () => Promise<void>;
   onUpload: (file: File) => Promise<void>;
   onCreateProject: (name: string) => Promise<void>;
@@ -102,6 +103,7 @@ function TreeNode({
 }
 
 export function TreeView({
+  isGuest = false,
   onRefresh,
   onUpload,
   onCreateProject,
@@ -159,6 +161,7 @@ export function TreeView({
           provider.
         </p>
         <ProjectSwitcher
+          readOnly={isGuest}
           projects={projects}
           currentProjectId={currentProjectId}
           onChangeProject={onChangeProject}
@@ -169,11 +172,11 @@ export function TreeView({
           <button
             type="button"
             className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-teal-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isUploading || !currentProjectId}
+            disabled={isGuest || isUploading || !currentProjectId}
             onClick={() => inputRef.current?.click()}
           >
             <FilePlus2 className="h-4 w-4" />
-            {isUploading ? "Uploading..." : "Upload PDF"}
+            {isGuest ? "Sign in to upload" : isUploading ? "Uploading..." : "Upload PDF"}
           </button>
           <button
             type="button"
@@ -191,6 +194,11 @@ export function TreeView({
             onChange={handleFileSelection}
           />
         </div>
+        {isGuest ? (
+          <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            Demo mode is read-only. Sign in to create projects, upload PDFs, and persist analysis.
+          </p>
+        ) : null}
         {uploadProgress > 0 ? (
           <progress
             className="h-1 w-full overflow-hidden rounded [&::-webkit-progress-value]:bg-teal-500"

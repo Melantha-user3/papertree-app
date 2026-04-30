@@ -4,6 +4,7 @@ import { FolderGit2, Plus, WandSparkles } from "lucide-react";
 import type { ProjectRecord } from "@/lib/types/papertree";
 
 interface ProjectSwitcherProps {
+  readOnly?: boolean;
   projects: ProjectRecord[];
   currentProjectId: string | null;
   onChangeProject: (projectId: string) => void;
@@ -12,6 +13,7 @@ interface ProjectSwitcherProps {
 }
 
 export function ProjectSwitcher({
+  readOnly = false,
   projects,
   currentProjectId,
   onChangeProject,
@@ -48,6 +50,7 @@ export function ProjectSwitcher({
         <button
           type="button"
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
+          disabled={readOnly}
           onClick={handleCreateProject}
         >
           <Plus className="h-4 w-4" />
@@ -56,6 +59,7 @@ export function ProjectSwitcher({
         <button
           type="button"
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
+          disabled={readOnly}
           onClick={onRelayout}
         >
           <WandSparkles className="h-4 w-4" />

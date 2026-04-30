@@ -20,6 +20,8 @@ import type {
 } from "@/lib/types/papertree";
 
 const SAMPLE_PROJECT_NAME = "Sample Project - Quantum Dots";
+export const DEMO_PROJECT_ID = "demo-sample-project";
+const DEMO_USER_ID = "demo-user";
 const COMPARABLE_CHAIN_METRIC_KEYS = new Set([
   "efficiency",
   "plqy",
@@ -325,6 +327,135 @@ function normalizeProject(project: Record<string, unknown>): ProjectRecord {
     user_id: String(project.user_id),
     created_at: String(project.created_at),
     updated_at: String(project.updated_at),
+  };
+}
+
+function buildSampleProject(userId = DEMO_USER_ID, projectId = DEMO_PROJECT_ID): ProjectRecord {
+  const now = new Date("2026-01-01T00:00:00.000Z").toISOString();
+
+  return {
+    id: projectId,
+    name: SAMPLE_PROJECT_NAME,
+    user_id: userId,
+    created_at: now,
+    updated_at: now,
+  };
+}
+
+function buildSampleNodes(projectId = DEMO_PROJECT_ID): PaperNodeRecord[] {
+  const now = new Date("2026-01-01T00:00:00.000Z").toISOString();
+
+  return samplePaperSeeds.map((seed, index) => {
+    const metadata: PaperMetadata = {
+      authors: index % 2 === 0 ? ["A. Chen", "M. Rivera"] : ["J. Patel", "K. Lin"],
+      year: seed.year,
+      publication_year_source: "sample_project",
+      publication_year_confidence: 0.98,
+      academic_confidence: 0.95,
+      academic_signals: ["abstract", "methods", "results", "references"],
+      venue: seed.venue,
+      tech_route_tags: [...seed.routeTags],
+      experimental_params: [...seed.params],
+      page_count: 12 + index,
+      original_file_name: `${seed.key}.pdf`,
+      pdf_url: null,
+      cover_url: null,
+      analysis: {
+        key_points: [
+          `Positions ${seed.routeTags[0]} as a core technical route.`,
+          `Reports comparable ${seed.params.map((param) => param.label).join(" and ")} values.`,
+          "Included in the sample project to demonstrate locked-chain synthesis.",
+        ],
+        mode: "mock",
+        topics: [...seed.topics],
+        venue: seed.venue,
+        tech_route_tags: [...seed.routeTags],
+        experimental_params: [...seed.params],
+        provider: "mock",
+        model: "sample-seed",
+      },
+      document: {
+        page_count: 12 + index,
+        extracted_excerpt_length: 420,
+      },
+    };
+
+    return {
+      id: `demo-${seed.key}`,
+      project_id: projectId,
+      title: seed.title,
+      type: "article",
+      metadata,
+      preview_file_url: null,
+      status: index >= 3 ? "deep" : "unread",
+      analysis_status: "ready",
+      is_academic: true,
+      publication_year: seed.year,
+      position_x: seed.x,
+      position_y: seed.y,
+      summary: seed.summary,
+      analysis_error: null,
+      source_file_name: `${seed.key}.pdf`,
+      source_file_path: null,
+      source_mime_type: "application/pdf",
+      file_size_bytes: 1800000 + index * 120000,
+      page_count: 12 + index,
+      source_excerpt:
+        "Sample project excerpt: quantum dot methods, parameter extraction, semantic route tagging, and locked chain synthesis are preloaded for onboarding.",
+      analysis_started_at: now,
+      analysis_completed_at: now,
+      analysis_attempt_count: 1,
+      created_at: now,
+      updated_at: now,
+    };
+  });
+}
+
+function buildSampleEdges(projectId = DEMO_PROJECT_ID): PaperEdgeRecord[] {
+  const now = new Date("2026-01-01T00:00:00.000Z").toISOString();
+  const edgePairs = [
+    ["surface-passivation-2019", "annealing-2020", 0.71],
+    ["annealing-2020", "charge-transport-2021", 0.68],
+    ["charge-transport-2021", "plqy-2022", 0.64],
+    ["plqy-2022", "integrated-stack-2024", 0.78],
+  ] as const;
+
+  return edgePairs.map(([sourceKey, targetKey, weight]) => ({
+    project_id: projectId,
+    source_id: `demo-${sourceKey}`,
+    target_id: `demo-${targetKey}`,
+    relation_type: "semantic",
+    weight,
+    is_locked: true,
+    created_at: now,
+  }));
+}
+
+export function listDemoProjects() {
+  return [buildSampleProject()];
+}
+
+export function listDemoPaperGraph(projectId: string) {
+  if (projectId !== DEMO_PROJECT_ID) {
+    throw new Error(`Project ${projectId} was not found.`);
+  }
+
+  return {
+    nodes: buildSampleNodes(projectId),
+    edges: buildSampleEdges(projectId),
+  };
+}
+
+export function getDemoPaperNodeDetail(projectId: string, nodeId: string): PaperNodeDetailRecord {
+  const node = listDemoPaperGraph(projectId).nodes.find((item) => item.id === nodeId);
+
+  if (!node) {
+    throw new Error(`Paper node ${nodeId} was not found.`);
+  }
+
+  return {
+    ...node,
+    signed_file_url: null,
   };
 }
 

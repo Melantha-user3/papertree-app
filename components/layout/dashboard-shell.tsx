@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogOut, ShieldCheck } from "lucide-react";
+import { LogIn, LogOut, ShieldCheck } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { TreeView } from "@/components/sidebar/tree-view";
 import { usePaperTreeRuntime } from "@/lib/hooks/use-papertree-runtime";
@@ -10,7 +11,7 @@ import { usePaperTreeStore } from "@/lib/store/use-papertree-store";
 
 interface DashboardShellProps {
   children: React.ReactNode;
-  userEmail: string;
+  userEmail: string | null;
 }
 
 const PdfViewer = dynamic(
@@ -30,6 +31,7 @@ export function DashboardShell({ children, userEmail }: DashboardShellProps) {
     usePaperTreeRuntime();
   const projects = usePaperTreeStore((state) => state.projects);
   const currentProjectId = usePaperTreeStore((state) => state.currentProjectId);
+  const isGuest = !userEmail;
 
   return (
     <div className="flex h-screen w-screen overflow-hidden p-3 lg:p-4">
@@ -43,27 +45,41 @@ export function DashboardShell({ children, userEmail }: DashboardShellProps) {
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-slate-900">PAPERTREE</p>
             <p className="mt-1 text-xs text-slate-500">
-              Auth-protected paper analysis with user-scoped storage and signed PDF access.
+              {isGuest
+                ? "Explore a demo literature tree. Sign in to upload PDFs and save private projects."
+                : "Private paper analysis with user-scoped storage and signed PDF access."}
             </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs text-emerald-700 md:inline-flex">
               <ShieldCheck className="h-3.5 w-3.5" />
-              Auth protected
+              {isGuest ? "Demo mode" : "Auth protected"}
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-right">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Signed in</p>
-              <p className="max-w-[220px] truncate text-sm text-slate-900">{userEmail}</p>
-            </div>
-            <form action="/auth/signout" method="post">
-              <button
-                type="submit"
+            {isGuest ? (
+              <Link
+                href="/login"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50"
               >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </button>
-            </form>
+                <LogIn className="h-4 w-4" />
+                Sign in
+              </Link>
+            ) : (
+              <>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-right">
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Signed in</p>
+                  <p className="max-w-[220px] truncate text-sm text-slate-900">{userEmail}</p>
+                </div>
+                <form action="/auth/signout" method="post">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </header>
 
@@ -81,6 +97,7 @@ export function DashboardShell({ children, userEmail }: DashboardShellProps) {
             <aside className="h-full overflow-hidden">
               <div className="h-full min-w-[250px]">
                 <TreeView
+                  isGuest={isGuest}
                   onRefresh={refreshNodes}
                   onUpload={uploadPaper}
                   onCreateProject={createNewProject}

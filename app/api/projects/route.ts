@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { createProject, listProjects } from "@/lib/server/papers";
+import { createProject, listDemoProjects, listProjects } from "@/lib/server/papers";
 import {
+  getAuthenticatedUser,
   isAuthenticationError,
   requireAuthenticatedUser,
 } from "@/lib/supabase/auth";
@@ -10,7 +11,11 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const user = await requireAuthenticatedUser();
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json({ projects: listDemoProjects(), mode: "demo" });
+    }
+
     const projects = await listProjects(user.id);
     return NextResponse.json({ projects });
   } catch (error) {
