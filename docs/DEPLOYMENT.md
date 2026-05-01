@@ -30,8 +30,11 @@ trace path is more stable with webpack.
 npm run deploy:prod
 ```
 
-The Vercel project uses Node.js 24.x and should install from the lockfile. Keep
-real environment values in Vercel project settings, not in repo files.
+The Vercel project uses Node.js 24.x. The install command is
+`npm install --package-lock=false` to avoid Vercel mutating the lockfile while
+also avoiding npm 11/remote npm strictness around `sharp` optional package lock
+metadata. Keep real environment values in Vercel project settings, not in repo
+files.
 
 ## Known Vercel/Next Workarounds
 

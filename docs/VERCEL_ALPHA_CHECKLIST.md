@@ -48,7 +48,7 @@ See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for the detailed setup.
 - [ ] Import the GitHub repository into Vercel.
 - [ ] Framework preset: **Next.js**.
 - [ ] Build command: `npm run build`.
-- [ ] Install command: `npm ci`.
+- [ ] Install command: `npm install --package-lock=false`.
 - [ ] Output directory: leave default.
 - [ ] Node.js runtime: use Vercel default unless a build log requires changing it.
 
