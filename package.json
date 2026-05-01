@@ -11,7 +11,10 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify": "npm run lint && npm run build",
+    "public:check": "node scripts/public-safety-check.mjs",
+    "deploy:prod": "npm run public:check && npm run verify && vercel deploy --prod"
   },
   "dependencies": {
     "@react-pdf-viewer/core": "^3.12.0",

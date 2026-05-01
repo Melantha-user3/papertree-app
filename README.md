@@ -16,7 +16,8 @@ It is designed for real research workflows: upload papers, inspect the PDF, map 
 
 ## Features
 
-- **Auth-protected workspace**: Supabase email/password auth with server-protected dashboard routes.
+- **Public demo workspace**: signed-out visitors can inspect the Quantum Dots sample project before creating an account.
+- **Auth-protected private workspace**: Supabase email/password auth protects uploads, saved projects, and user-owned papers.
 - **Project isolation**: each user can create and switch between private literature projects.
 - **PDF upload pipeline**: validates PDF uploads, stores files in Supabase Storage, and reads them through signed URLs.
 - **Metadata and text extraction**: extracts title, year, page count, and text excerpts from uploaded PDFs.
@@ -93,15 +94,15 @@ Open [http://localhost:3000](http://localhost:3000).
 ### 5. Validate production build
 
 ```bash
-npm run lint
-npm run build
+npm run public:check
+npm run verify
 ```
 
 ## Deployment
 
 PaperTree requires a Node.js-capable Next.js deployment because it uses route handlers, authentication, file upload, PDF extraction, and LLM calls.
 
-For the first private deployment, follow [docs/VERCEL_ALPHA_CHECKLIST.md](docs/VERCEL_ALPHA_CHECKLIST.md).
+For deployment hardening and public-release checks, follow [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) and [docs/PUBLIC_RELEASE_CHECKLIST.md](docs/PUBLIC_RELEASE_CHECKLIST.md).
 
 Recommended first deployment:
 

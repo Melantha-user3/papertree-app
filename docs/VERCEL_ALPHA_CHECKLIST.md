@@ -7,8 +7,8 @@ Use this checklist for the first private PaperTree deployment. The goal is a sta
 - [ ] Confirm local checks pass:
 
   ```bash
-  npm run lint
-  npm run build
+  npm run public:check
+  npm run verify
   ```
 
 - [ ] Confirm no local secrets are committed:
@@ -48,7 +48,7 @@ See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for the detailed setup.
 - [ ] Import the GitHub repository into Vercel.
 - [ ] Framework preset: **Next.js**.
 - [ ] Build command: `npm run build`.
-- [ ] Install command: `npm install`.
+- [ ] Install command: `npm ci`.
 - [ ] Output directory: leave default.
 - [ ] Node.js runtime: use Vercel default unless a build log requires changing it.
 
