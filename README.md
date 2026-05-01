@@ -6,6 +6,8 @@ It is designed for real research workflows: upload papers, inspect the PDF, map 
 
 **Live Demo:** [https://papertree-app-q9bj.vercel.app](https://papertree-app-q9bj.vercel.app)
 
+No PDF? No problem. Open the live demo and explore the pre-loaded Quantum Dots sample project before uploading anything.
+
 **Alpha Feedback:** [Open a GitHub issue](https://github.com/Melantha-user3/papertree-app/issues) or email [jinlongwan57@gmail.com](mailto:jinlongwan57@gmail.com) for bugs, confusing flows, or research-workflow suggestions.
 
 ## Why PaperTree
