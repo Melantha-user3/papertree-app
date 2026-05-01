@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { login, signup } from "@/app/login/actions";
+import { AuthForm } from "@/components/auth/auth-form";
 import { PaperTreeMark } from "@/components/brand/papertree-mark";
 import { getAuthenticatedUser } from "@/lib/supabase/auth";
 
@@ -107,7 +108,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-500">
               {mode === "signup"
-                ? "Use an email you can access. If email confirmation is enabled, Supabase will send a confirmation link before the first sign-in."
+                ? "Create an alpha account and go straight to the private workspace. No email confirmation step is required."
                 : "Use the account you created for private projects, or open the sample project without signing in."}
             </p>
 
@@ -123,46 +124,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               </div>
             ) : null}
 
-            <form action={mode === "signup" ? signup : login} className="mt-6 space-y-4">
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-700">Email</span>
-                <input
-                  required
-                  autoComplete="email"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500"
-                  name="email"
-                  placeholder="you@example.com"
-                  type="email"
-                />
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-sm text-slate-700">Password</span>
-                <input
-                  required
-                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500"
-                  minLength={8}
-                  name="password"
-                  placeholder="At least 8 characters"
-                  type="password"
-                />
-              </label>
-
-              <button
-                className="w-full rounded-2xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
-                type="submit"
-              >
-                {mode === "signup" ? "Create account" : "Sign in"}
-              </button>
-            </form>
-
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-              <Link className="font-semibold text-teal-700 underline-offset-4 hover:underline" href="/canvas">
-                Open the Quantum Dots sample
-              </Link>{" "}
-              without creating an account.
-            </div>
+            <AuthForm action={mode === "signup" ? signup : login} mode={mode} />
           </div>
         </section>
       </div>

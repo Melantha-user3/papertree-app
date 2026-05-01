@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getSupabaseAdmin } from "@/lib/supabase/admin-client";
 import { createSupabaseRouteClient } from "@/lib/supabase/auth";
 
 function buildRedirect(path: string, params: Record<string, string | undefined>) {
@@ -23,6 +24,14 @@ function readCredential(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function normalizeEmail(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function isDuplicateUserError(error: { message?: string } | null) {
+  return /already|registered|exists/i.test(error?.message ?? "");
+}
+
 async function getRequestOrigin() {
   const headersList = await headers();
   const origin = headersList.get("origin");
@@ -38,7 +47,7 @@ async function getRequestOrigin() {
 }
 
 export async function login(formData: FormData) {
-  const email = readCredential(formData, "email");
+  const email = normalizeEmail(readCredential(formData, "email"));
   const password = readCredential(formData, "password");
 
   if (!email || !password) {
@@ -70,7 +79,7 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const email = readCredential(formData, "email");
+  const email = normalizeEmail(readCredential(formData, "email"));
   const password = readCredential(formData, "password");
 
   if (!email || !password) {
@@ -83,6 +92,51 @@ export async function signup(formData: FormData) {
   }
 
   const supabase = await createSupabaseRouteClient();
+
+  try {
+    const admin = getSupabaseAdmin();
+    const { error: createError } = await admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        source: "papertree-alpha",
+      },
+    });
+
+    if (createError && !isDuplicateUserError(createError)) {
+      redirect(
+        buildRedirect("/login", {
+          error: createError.message,
+          mode: "signup",
+        }),
+      );
+    }
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (!signInError) {
+      revalidatePath("/", "layout");
+      redirect("/canvas");
+    }
+
+    redirect(
+      buildRedirect("/login", {
+        error: isDuplicateUserError(createError)
+          ? "This email already has an account. Sign in with the original password, or use a different email for alpha testing."
+          : signInError.message,
+        mode: isDuplicateUserError(createError) ? "signin" : "signup",
+      }),
+    );
+  } catch (error) {
+    if (!(error instanceof Error) || !error.message.includes("Missing SUPABASE_URL")) {
+      throw error;
+    }
+  }
+
   const origin = await getRequestOrigin();
   const { data, error } = await supabase.auth.signUp({
     email,
