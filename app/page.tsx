@@ -9,6 +9,7 @@ import {
   LockKeyhole,
   Sparkles,
 } from "lucide-react";
+import { PaperTreeMark } from "@/components/brand/papertree-mark";
 
 const papers = [
   ["2019", "Surface Passivation Routes", "Passivation"],
@@ -26,19 +27,19 @@ const trendPoints = [
 
 const features = [
   {
-    title: "Visualize",
+    title: "Map the papers",
     description:
       "Turn uploaded PDFs into a semantic research map with route lanes, locked edges, and readable paper nodes.",
     icon: GitBranch,
   },
   {
-    title: "Analyze",
+    title: "Compare the parameters",
     description:
       "Extract comparable experimental parameters and track method evolution across a selected chain.",
     icon: ChartNoAxesCombined,
   },
   {
-    title: "Synthesize",
+    title: "Draft the review",
     description:
       "Generate Markdown, plain text, LaTeX, and BibTeX from the exact papers you locked into the review path.",
     icon: Sparkles,
@@ -160,9 +161,7 @@ export default function HomePage() {
         <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
           <header className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-teal-700 text-sm font-bold text-white">
-                PT
-              </span>
+              <PaperTreeMark className="h-9 w-9" />
               <span className="text-base font-semibold text-slate-950">PaperTree</span>
             </Link>
             <nav className="flex items-center gap-2">
@@ -189,41 +188,46 @@ export default function HomePage() {
                 Sign in
               </Link>
               <Link
-                href="/login?mode=signup"
+                href="/canvas"
                 className="rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-800"
               >
-                Create account
+                Sample project
               </Link>
             </nav>
           </header>
 
           <div className="grid flex-1 items-center gap-10 py-12 lg:grid-cols-[0.78fr_1.22fr] lg:py-8">
             <div className="max-w-2xl">
+              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
+                Research PDF to literature-review workspace
+              </p>
               <h1 className="max-w-3xl text-5xl font-semibold leading-[1.02] text-slate-950 sm:text-6xl lg:text-7xl">
-                From Messy PDFs to Structured Research Intelligence.
+                Turn research PDFs into a paper map, trend charts, and a review draft.
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-                PaperTree turns research PDFs into semantic lanes, parameter trends, and
-                citation-ready synthesis outputs for serious literature review work.
+                PaperTree reads a set of papers, connects their methods and findings, extracts
+                comparable experimental parameters, and drafts a literature review from the chain
+                you choose.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/login?mode=signup"
+                  href="/canvas"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-teal-800"
                 >
-                  Start with sample project
+                  Open Quantum Dots sample
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/login?mode=signin"
+                  href="/login?mode=signup"
                   className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
                 >
-                  Sign in
+                  Create private account
                 </Link>
               </div>
               <p className="mt-6 flex max-w-xl items-start gap-2 text-sm leading-6 text-slate-500">
                 <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-teal-700" />
-                User-scoped Supabase RLS. Local Ollama support available.
+                No upload needed for the sample project. Create an account only when you want to
+                save private projects and upload your own PDFs.
               </p>
               <p className="mt-3 text-sm leading-6 text-slate-500">
                 Alpha feedback:{" "}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { login, signup } from "@/app/login/actions";
+import { PaperTreeMark } from "@/components/brand/papertree-mark";
 import { getAuthenticatedUser } from "@/lib/supabase/auth";
 
 interface LoginPageProps {
@@ -52,18 +53,18 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <div className="relative">
             <p className="text-xs uppercase tracking-[0.24em] text-teal-700">PaperTree</p>
             <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-              Private paper analysis for real research workflows.
+              Create a private workspace when you are ready to upload your own PDFs.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
-              Sign in to upload PDFs, run asynchronous analysis through your configured LLM
-              provider, and keep every paper isolated to its owning Supabase user.
+              You can inspect the Quantum Dots sample without an account. Registration is only
+              needed for saved projects, private uploads, and user-scoped storage.
             </p>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Auth</p>
                 <p className="mt-2 text-sm text-slate-700">
-                  `/canvas` is server-protected and redirects to login when no session exists.
+                  Email/password accounts are handled by Supabase Auth.
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -75,7 +76,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Analysis</p>
                 <p className="mt-2 text-sm text-slate-700">
-                  Upload transitions through `uploaded`, `analyzing`, and `ready / error`.
+                  Upload PDFs, extract parameters, and draft reviews from locked paper chains.
                 </p>
               </div>
             </div>
@@ -84,6 +85,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
         <section className="flex items-center">
           <div className="w-full rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <div className="mb-6 flex items-center gap-3">
+              <PaperTreeMark className="h-10 w-10" />
+              <div>
+                <p className="text-sm font-semibold text-slate-950">PaperTree</p>
+                <p className="text-xs text-slate-500">Alpha research workspace</p>
+              </div>
+            </div>
+
             <div className="flex items-center gap-2">
               <ModeButton active={mode === "signin"} href="/login?mode=signin" label="Sign In" />
               <ModeButton
@@ -97,8 +106,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               {mode === "signup" ? "Create your workspace" : "Sign in to PaperTree"}
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Email/password auth is wired. If you later enable GitHub OAuth in Supabase, this page
-              can be extended without changing the protected routes.
+              {mode === "signup"
+                ? "Use an email you can access. If email confirmation is enabled, Supabase will send a confirmation link before the first sign-in."
+                : "Use the account you created for private projects, or open the sample project without signing in."}
             </p>
 
             {params.error ? (
@@ -113,7 +123,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               </div>
             ) : null}
 
-            <form className="mt-6 space-y-4">
+            <form action={mode === "signup" ? signup : login} className="mt-6 space-y-4">
               <label className="block">
                 <span className="mb-2 block text-sm text-slate-700">Email</span>
                 <input
@@ -139,23 +149,20 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 />
               </label>
 
-              <div className="grid gap-3 pt-2 sm:grid-cols-2">
-                <button
-                  className="rounded-2xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
-                  formAction={login}
-                  type="submit"
-                >
-                  Sign In
-                </button>
-                <button
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
-                  formAction={signup}
-                  type="submit"
-                >
-                  Create Account
-                </button>
-              </div>
+              <button
+                className="w-full rounded-2xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
+                type="submit"
+              >
+                {mode === "signup" ? "Create account" : "Sign in"}
+              </button>
             </form>
+
+            <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+              <Link className="font-semibold text-teal-700 underline-offset-4 hover:underline" href="/canvas">
+                Open the Quantum Dots sample
+              </Link>{" "}
+              without creating an account.
+            </div>
           </div>
         </section>
       </div>

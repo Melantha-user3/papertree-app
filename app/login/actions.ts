@@ -109,7 +109,8 @@ export async function signup(formData: FormData) {
 
   redirect(
     buildRedirect("/login", {
-      message: "Account created. Check your email if confirmation is enabled, then sign in.",
+      message:
+        "Account created. If a confirmation email arrives, open that link first, then sign in.",
       mode: "signin",
     }),
   );

@@ -13,15 +13,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["education", "productivity", "utilities"],
     icons: [
       {
-        src: "/papertree-icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/icon",
+        sizes: "192x192",
+        type: "image/png",
         purpose: "any",
       },
       {
-        src: "/papertree-icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/apple-icon",
+        sizes: "180x180",
+        type: "image/png",
         purpose: "maskable",
       },
     ],

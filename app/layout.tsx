@@ -16,8 +16,11 @@ export const metadata: Metadata = {
     title: "PaperTree",
   },
   icons: {
-    icon: "/papertree-icon.svg",
-    apple: "/papertree-icon.svg",
+    icon: [
+      { url: "/icon", type: "image/png", sizes: "192x192" },
+      { url: "/papertree-icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
   },
 };
 
