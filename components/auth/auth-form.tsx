@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 interface AuthFormProps {
   action: (formData: FormData) => void | Promise<void>;
   mode: "signin" | "signup";
+  nextPath?: string;
 }
 
 function SubmitButton({ mode }: { mode: AuthFormProps["mode"] }) {
@@ -23,10 +24,11 @@ function SubmitButton({ mode }: { mode: AuthFormProps["mode"] }) {
   );
 }
 
-export function AuthForm({ action, mode }: AuthFormProps) {
+export function AuthForm({ action, mode, nextPath = "/canvas" }: AuthFormProps) {
   return (
     <>
       <form action={action} className="mt-6 space-y-4">
+        <input name="next" type="hidden" value={nextPath} />
         <label className="block">
           <span className="mb-2 block text-sm text-slate-700">Email</span>
           <input

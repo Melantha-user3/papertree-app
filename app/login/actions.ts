@@ -28,6 +28,14 @@ function normalizeEmail(value: string) {
   return value.trim().toLowerCase();
 }
 
+function safeNextPath(value: string) {
+  if (!value.startsWith("/") || value.startsWith("//")) {
+    return "/canvas";
+  }
+
+  return value;
+}
+
 function isDuplicateUserError(error: { message?: string } | null) {
   return /already|registered|exists/i.test(error?.message ?? "");
 }
@@ -49,12 +57,14 @@ async function getRequestOrigin() {
 export async function login(formData: FormData) {
   const email = normalizeEmail(readCredential(formData, "email"));
   const password = readCredential(formData, "password");
+  const next = safeNextPath(readCredential(formData, "next"));
 
   if (!email || !password) {
     redirect(
       buildRedirect("/login", {
         error: "Email and password are required.",
         mode: "signin",
+        next,
       }),
     );
   }
@@ -70,23 +80,26 @@ export async function login(formData: FormData) {
       buildRedirect("/login", {
         error: error.message,
         mode: "signin",
+        next,
       }),
     );
   }
 
   revalidatePath("/", "layout");
-  redirect("/canvas");
+  redirect(next);
 }
 
 export async function signup(formData: FormData) {
   const email = normalizeEmail(readCredential(formData, "email"));
   const password = readCredential(formData, "password");
+  const next = safeNextPath(readCredential(formData, "next"));
 
   if (!email || !password) {
     redirect(
       buildRedirect("/login", {
         error: "Email and password are required.",
         mode: "signup",
+        next,
       }),
     );
   }
@@ -109,6 +122,7 @@ export async function signup(formData: FormData) {
         buildRedirect("/login", {
           error: createError.message,
           mode: "signup",
+          next,
         }),
       );
     }
@@ -120,7 +134,7 @@ export async function signup(formData: FormData) {
 
     if (!signInError) {
       revalidatePath("/", "layout");
-      redirect("/canvas");
+      redirect(next);
     }
 
     redirect(
@@ -129,6 +143,7 @@ export async function signup(formData: FormData) {
           ? "This email already has an account. Sign in with the original password, or use a different email for alpha testing."
           : signInError.message,
         mode: isDuplicateUserError(createError) ? "signin" : "signup",
+        next,
       }),
     );
   } catch (error) {
@@ -142,7 +157,7 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/auth/confirm?next=/canvas`,
+      emailRedirectTo: `${origin}/auth/confirm?next=${encodeURIComponent(next)}`,
     },
   });
 
@@ -151,6 +166,7 @@ export async function signup(formData: FormData) {
       buildRedirect("/login", {
         error: error.message,
         mode: "signup",
+        next,
       }),
     );
   }
@@ -158,7 +174,7 @@ export async function signup(formData: FormData) {
   revalidatePath("/", "layout");
 
   if (data.session) {
-    redirect("/canvas");
+    redirect(next);
   }
 
   redirect(
@@ -166,6 +182,7 @@ export async function signup(formData: FormData) {
       message:
         "Account created. If a confirmation email arrives, open that link first, then sign in.",
       mode: "signin",
+      next,
     }),
   );
 }

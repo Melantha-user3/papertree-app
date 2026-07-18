@@ -4,19 +4,48 @@
 
 :root {
   color-scheme: light;
+  --app-bg: #f7f8fa;
+  --panel-bg: #ffffff;
+  --panel-raised: #f8fafc;
+  --hairline: #e5e7eb;
+  --hairline-strong: #d1d5db;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #9ca3af;
 }
 
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: #ffffff;
-  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-  background-size: 24px 24px;
+  background: #f7f8fa;
+  color: var(--text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 .rpv-default-layout__main {
-  border-radius: 0.75rem;
+  border-radius: 0.375rem;
   overflow: hidden;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  background-clip: content-box;
+  background-color: #cbd5e1;
 }
 
 /* Ensure resize handles are easy to grab, even when canvas layers overlap */
@@ -44,7 +73,7 @@ body {
   bottom: 0;
   width: 2px;
   border-radius: 9999px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #e5e7eb;
   transition: background-color 0.2s ease;
 }
 
@@ -53,10 +82,73 @@ body {
 [data-panel-group-direction="horizontal"] > [data-panel-resize-handle][data-active="true"]::after,
 [data-panel-group-direction="horizontal"] > [data-panel-resize-handle]:hover::after,
 .panel-resize-handle:hover::after {
-  background-color: rgba(0, 0, 0, 0.22);
+  background-color: #93c5fd;
 }
 
 [data-group][aria-orientation="horizontal"] > [data-separator="drag"]::after,
 [data-panel-group-direction="horizontal"] > [data-panel-resize-handle][data-active="true"]::after {
   background-color: #3b82f6;
+}
+
+.react-flow__controls {
+  overflow: hidden !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+.react-flow__controls-button {
+  border-bottom: 1px solid #eef2f7 !important;
+  background: transparent !important;
+  color: #64748b !important;
+  fill: #64748b !important;
+}
+
+.react-flow__controls-button:hover {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+}
+
+.react-flow__minimap {
+  overflow: hidden !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(239, 246, 255, 0.72) !important;
+}
+
+.react-flow__minimap-node {
+  fill: rgba(59, 130, 246, 0.55) !important;
+}
+
+.react-flow__edge-textbg {
+  fill: rgba(255, 255, 255, 0.96) !important;
+}
+
+.react-flow__edge-text {
+  fill: #64748b !important;
+  font-size: 10px !important;
+}
+
+.workspace-grid {
+  background-color: #fbfdff;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.paper-preview-muted {
+  filter: none;
 }

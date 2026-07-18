@@ -97,7 +97,7 @@ export function ChainMetricsChart({
   }
 
   return (
-    <div className="rounded-xl border border-white/80 bg-white/80 p-3">
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
       <div className="flex flex-wrap gap-2">
         {series.map((item) => {
           const active = item.key === activeSeries.key;
@@ -105,10 +105,10 @@ export function ChainMetricsChart({
             <button
               key={item.key}
               type="button"
-              className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition ${
+              className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition ${
                 active
-                  ? "border-cyan-300 bg-cyan-100 text-cyan-800"
-                  : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-500 hover:bg-blue-50 hover:text-blue-700"
               }`}
               onClick={() => onSelectMetric(item.key)}
             >
@@ -126,7 +126,7 @@ export function ChainMetricsChart({
               {activeSeries.unit ? ` (${activeSeries.unit})` : ""}
             </p>
             {modeLabel ? (
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-700">
+              <span className="rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-medium uppercase text-blue-700">
                 {modeLabel}
               </span>
             ) : null}
@@ -146,8 +146,8 @@ export function ChainMetricsChart({
         >
           <defs>
             <linearGradient id={`metric-gradient-${activeSeries.key}`} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.24" />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.03" />
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.01" />
             </linearGradient>
           </defs>
 
@@ -178,7 +178,7 @@ export function ChainMetricsChart({
           <path
             d={linePath}
             fill="none"
-            stroke="#0891b2"
+            stroke="#3b82f6"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2.5"
@@ -189,7 +189,7 @@ export function ChainMetricsChart({
               key={`${item.label}-${item.y}`}
               x={CHART_WIDTH - CHART_PADDING.right}
               y={item.y}
-              fill="#64748b"
+              fill="#94a3b8"
               fontSize="11"
               textAnchor="end"
             >
@@ -207,15 +207,15 @@ export function ChainMetricsChart({
                   x2={point.x}
                   y1={point.y}
                   y2={CHART_HEIGHT - CHART_PADDING.bottom}
-                  stroke={active ? "#0891b2" : "#cbd5e1"}
+                  stroke={active ? "#2563eb" : "#cbd5e1"}
                   strokeDasharray="3 4"
                 />
                 <circle
                   cx={point.x}
                   cy={point.y}
                   r={active ? 6 : 5}
-                  fill={active ? "#0891b2" : "#ffffff"}
-                  stroke="#0891b2"
+                  fill={active ? "#2563eb" : "#ffffff"}
+                  stroke="#3b82f6"
                   strokeWidth={active ? 3 : 2}
                   onClick={() => onSelectNode(point.nodeId)}
                   onKeyDown={(event) => handlePointKeyDown(point.nodeId, event)}
@@ -231,7 +231,7 @@ export function ChainMetricsChart({
                 <text
                   x={point.x}
                   y={CHART_HEIGHT - 10}
-                  fill={active ? "#0f172a" : "#64748b"}
+                  fill={active ? "#1d4ed8" : "#64748b"}
                   fontSize="11"
                   textAnchor="middle"
                 >
@@ -251,9 +251,9 @@ export function ChainMetricsChart({
             <button
               key={`summary-${point.nodeId}`}
               type="button"
-              className={`rounded-xl border px-3 py-2 text-left transition ${
+              className={`rounded-md border px-3 py-2 text-left transition ${
                 active
-                  ? "border-cyan-300 bg-cyan-50"
+                  ? "border-blue-200 bg-blue-50"
                   : "border-slate-200 bg-white hover:bg-slate-50"
               }`}
               onClick={() => onSelectNode(point.nodeId)}

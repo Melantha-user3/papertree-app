@@ -9,11 +9,11 @@ export function RouteLaneLabel({ data }: NodeProps) {
   const payload = data as unknown as RouteLaneLabelData;
 
   return (
-    <div className="pointer-events-none rounded-full border border-slate-300/80 bg-white/85 px-3 py-1.5 shadow-sm backdrop-blur-sm">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+    <div className="pointer-events-none border-l-2 border-blue-200 px-3 py-1">
+      <p className="text-[10px] font-medium uppercase text-slate-600">
         {payload.label}
       </p>
-      <p className="mt-0.5 text-[11px] text-slate-400">{payload.count} papers</p>
+      <p className="mt-0.5 text-[10px] text-slate-400">{payload.count} papers</p>
     </div>
   );
 }

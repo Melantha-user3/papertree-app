@@ -162,7 +162,14 @@ export default function HomePage() {
           <header className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
               <PaperTreeMark className="h-9 w-9" />
-              <span className="text-base font-semibold text-slate-950">PaperTree</span>
+              <span>
+                <span className="block text-base font-semibold leading-none text-slate-950">
+                  PaperTree
+                </span>
+                <span className="mt-1 block text-[9px] font-medium text-slate-400">
+                  by MIMIRtech
+                </span>
+              </span>
             </Link>
             <nav className="flex items-center gap-2">
               <a

@@ -151,7 +151,7 @@ const EXPERIMENTAL_PARAM_PATTERNS: Array<{ label: string; pattern: RegExp; unit?
   { label: "Current Density", pattern: /\bcurrent density\b[^.\n]{0,20}?(\d+(?:\.\d+)?)\s*(ma\/cm2|a\/cm2)\b/i },
 ];
 
-function compactWhitespace(value: string) {
+export function compactWhitespace(value: string) {
   return value.replace(/\s+/g, " ").trim();
 }
 
@@ -379,7 +379,7 @@ function inferExperimentalParams(text: string) {
   return params.slice(0, 6);
 }
 
-function inferPublicationYear(text: string, fallbackYear: number | null) {
+export function inferPublicationYear(text: string, fallbackYear: number | null) {
   const matches = [...text.matchAll(/\b(19|20)\d{2}\b/g)].map((match) => Number(match[0]));
   const filtered = matches.filter((year) => year >= 1900 && year <= new Date().getFullYear() + 1);
 
@@ -405,7 +405,7 @@ function inferPublicationYear(text: string, fallbackYear: number | null) {
   };
 }
 
-function buildMockAnalysis(input: {
+export function buildMockAnalysis(input: {
   title: string;
   fileName: string;
   text: string;
@@ -592,7 +592,7 @@ export async function analyzePaperText(input: {
   };
 }
 
-function buildMockSynthesisReview(input: {
+export function buildMockSynthesisReview(input: {
   title: string;
   chain: Array<{
     title: string;

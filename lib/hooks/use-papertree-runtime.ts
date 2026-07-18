@@ -2,9 +2,11 @@
 
 import { startTransition, useEffect, useEffectEvent, useMemo, useRef } from "react";
 import { toast } from "sonner";
+import { createPdfFirstPageThumbnail } from "@/lib/pdf/client-first-page-thumbnail";
 import { usePaperTreeStore } from "@/lib/store/use-papertree-store";
 import type {
   PaperEdgeRecord,
+  GroupRecord,
   PaperNodeDetailRecord,
   PaperNodeRecord,
   ProjectRecord,
@@ -25,6 +27,11 @@ interface PaperDetailResponse {
 
 interface ProjectsResponse {
   projects?: ProjectRecord[];
+  error?: string;
+}
+
+interface GroupsResponse {
+  groups?: GroupRecord[];
   error?: string;
 }
 
@@ -74,6 +81,7 @@ export function usePaperTreeRuntime() {
     nodes,
     selectedNodeId,
     setProjects,
+    setGroups,
     setCurrentProjectId,
     setNodes,
     setEdges,
@@ -127,6 +135,18 @@ export function usePaperTreeRuntime() {
         setCurrentProjectId(preferredProjectId);
         storeProjectId(preferredProjectId);
       }
+    });
+  }
+
+  async function refreshGroups() {
+    const payload = await readJson<GroupsResponse>(
+      await fetch("/api/groups", {
+        cache: "no-store",
+      }),
+    );
+
+    startTransition(() => {
+      setGroups(payload.groups || []);
     });
   }
 
@@ -252,6 +272,18 @@ export function usePaperTreeRuntime() {
       formData.append("file", file);
       formData.append("projectId", currentProjectId);
 
+      setUploadProgress(22);
+      try {
+        const thumbnail = await createPdfFirstPageThumbnail(file);
+        const thumbnailName = `${file.name.replace(/\.pdf$/i, "") || "paper"}-first-page.webp`;
+        formData.append(
+          "thumbnail",
+          new File([thumbnail], thumbnailName, { type: thumbnail.type }),
+        );
+      } catch {
+        // The PDF remains uploadable; the card can render page one on demand.
+      }
+
       setUploadProgress(45);
       const payload = await readJson<{ node: PaperNodeRecord }>(
         await fetch("/api/papers/upload", {
@@ -336,6 +368,65 @@ export function usePaperTreeRuntime() {
     }
   }
 
+  async function createGroup(name: string) {
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      return;
+    }
+
+    try {
+      const payload = await readJson<{ group: GroupRecord; project: ProjectRecord }>(
+        await fetch("/api/groups", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: trimmedName }),
+        }),
+      );
+
+      startTransition(() => {
+        setGroups([...usePaperTreeStore.getState().groups, payload.group]);
+        setProjects([...usePaperTreeStore.getState().projects, payload.project]);
+        setCurrentProjectId(payload.project.id);
+        setErrorMessage(null);
+      });
+      storeProjectId(payload.project.id);
+      toast.success("Group created.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to create group.";
+      setErrorMessage(message);
+      toast.error(message);
+    }
+  }
+
+  async function joinGroup(inviteCode: string) {
+    const normalizedInviteCode = inviteCode.trim();
+    if (!normalizedInviteCode) {
+      return;
+    }
+
+    try {
+      await readJson<{ group: GroupRecord }>(
+        await fetch("/api/groups/join", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ inviteCode: normalizedInviteCode }),
+        }),
+      );
+
+      await refreshGroups();
+      await refreshProjects();
+      toast.success("Joined group.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to join group.";
+      setErrorMessage(message);
+      toast.error(message);
+    }
+  }
+
   function changeProject(projectId: string) {
     startTransition(() => {
       setCurrentProjectId(projectId);
@@ -375,6 +466,17 @@ export function usePaperTreeRuntime() {
     void refreshProjects();
   });
 
+  const runRefreshGroups = useEffectEvent(() => {
+    void refreshGroups().catch((error) => {
+      if (error instanceof RequestError && error.status === 401) {
+        setGroups([]);
+        return;
+      }
+
+      setErrorMessage(error instanceof Error ? error.message : "Failed to load groups.");
+    });
+  });
+
   const runRefreshNodes = useEffectEvent(() => {
     void refreshNodes();
   });
@@ -385,6 +487,10 @@ export function usePaperTreeRuntime() {
 
   useEffect(() => {
     runRefreshProjects();
+  }, []);
+
+  useEffect(() => {
+    runRefreshGroups();
   }, []);
 
   useEffect(() => {
@@ -448,9 +554,12 @@ export function usePaperTreeRuntime() {
   return {
     refreshNodes,
     refreshProjects,
+    refreshGroups,
     retryAnalysis,
     uploadPaper,
     createNewProject,
+    createGroup,
+    joinGroup,
     changeProject,
     relayoutProject,
   };

@@ -64,20 +64,22 @@ const PAPER_EDGE_COLUMNS = [
   "is_locked",
   "created_at",
 ].join(", ");
-const PROJECT_COLUMNS = ["id", "name", "user_id", "created_at", "updated_at"].join(", ");
+const PROJECT_COLUMNS = ["id", "name", "user_id", "group_id", "created_at", "updated_at"].join(", ");
 
 const samplePaperSeeds = [
   {
     key: "surface-passivation-2019",
-    title: "Surface Passivation Routes for Colloidal Quantum Dot Films",
-    year: 2019,
-    venue: "Advanced Functional Materials",
+    title: "Absorption Modulation, Enhancement, and Narrowing Using Sub-Wavelength Gratings",
+    year: 2022,
+    venue: "IEEE ICET",
+    pdfFile: "sub-wavelength-gratings.pdf",
+    pages: 6,
     x: -640,
     y: -220,
     summary:
-      "Maps early ligand and surface passivation strategies for stabilizing colloidal quantum dot films while preserving carrier transport.",
-    topics: ["Quantum Dots", "Surface Passivation", "Ligand Exchange"],
-    routeTags: ["Passivation", "Surface Engineering"],
+      "Studies how sub-wavelength grating geometry modulates, enhances, and narrows optical absorption.",
+    topics: ["Sub-Wavelength Gratings", "Absorption Engineering", "Optical Simulation"],
+    routeTags: ["Optical Engineering", "Grating Design"],
     params: [
       {
         key: "plqy",
@@ -97,15 +99,17 @@ const samplePaperSeeds = [
   },
   {
     key: "annealing-2020",
-    title: "Low-Temperature Annealing for Efficient Quantum Dot Devices",
-    year: 2020,
-    venue: "ACS Applied Materials & Interfaces",
+    title: "Efficient SWIR PbS QD Photodetector Based on a Hot Spin-Coating Method",
+    year: 2024,
+    venue: "IEEE OGC",
+    pdfFile: "hot-spin-coating-pbs-qd.pdf",
+    pages: 4,
     x: -280,
     y: -120,
     summary:
-      "Shows how controlled low-temperature annealing improves film ordering and reduces trap-mediated loss in quantum dot devices.",
-    topics: ["Quantum Dots", "Annealing Optimization", "Device Integration"],
-    routeTags: ["Annealing", "Device Integration"],
+      "Applies a hot spin-coating process to improve PbS quantum-dot film formation and SWIR photodetector performance.",
+    topics: ["Quantum Dots", "Hot Spin-Coating", "SWIR Photodetectors"],
+    routeTags: ["Film Processing", "Device Integration"],
     params: [
       {
         key: "plqy",
@@ -125,15 +129,17 @@ const samplePaperSeeds = [
   },
   {
     key: "charge-transport-2021",
-    title: "Charge Transport Engineering in Quantum Dot Photodetectors",
-    year: 2021,
-    venue: "Nature Electronics",
+    title: "Electrophoretic Deposition of PbS QDs for SWIR Photodetectors",
+    year: 2024,
+    venue: "IEEE OGC",
+    pdfFile: "electrophoretic-deposition-pbs-qd.pdf",
+    pages: 3,
     x: 80,
     y: -30,
     summary:
-      "Connects passivated interfaces to transport-layer design and demonstrates higher responsivity in quantum dot photodetectors.",
-    topics: ["Quantum Dots", "Charge Transport", "Photodetectors"],
-    routeTags: ["Charge Transport", "Device Integration"],
+      "Investigates electrophoretic deposition as a controllable route for forming PbS quantum-dot SWIR detector layers.",
+    topics: ["Quantum Dots", "Electrophoretic Deposition", "SWIR Photodetectors"],
+    routeTags: ["Deposition", "Device Integration"],
     params: [
       {
         key: "responsivity",
@@ -153,15 +159,17 @@ const samplePaperSeeds = [
   },
   {
     key: "plqy-2022",
-    title: "Photoluminescence Yield Optimization with Hybrid Ligands",
-    year: 2022,
-    venue: "Science Advances",
+    title: "Improving the Performance of QD Photodetectors Through PEAI-Based Interface Passivation",
+    year: 2025,
+    venue: "IEEE EMP",
+    pdfFile: "peai-interface-passivation.pdf",
+    pages: 4,
     x: 440,
     y: -145,
     summary:
-      "Introduces hybrid ligand strategies that raise photoluminescence yield while keeping films compatible with device fabrication.",
-    topics: ["Quantum Dots", "Photoluminescence", "Hybrid Ligands"],
-    routeTags: ["Photoluminescence", "Passivation"],
+      "Uses a PEAI-based interfacial treatment to passivate defects and improve quantum-dot photodetector performance.",
+    topics: ["Quantum Dots", "Interface Passivation", "PEAI"],
+    routeTags: ["Passivation", "Interface Engineering"],
     params: [
       {
         key: "plqy",
@@ -181,15 +189,17 @@ const samplePaperSeeds = [
   },
   {
     key: "integrated-stack-2024",
-    title: "Integrated Quantum Dot Stacks for Stable High-Responsivity Devices",
-    year: 2024,
-    venue: "Nature Photonics",
+    title: "A Bilayer LiF/C60 Interfacial Strategy for High Efficiency Inverted PbS QD Photodetectors",
+    year: 2026,
+    venue: "IEEE Electron Device Letters",
+    pdfFile: "bilayer-lif-c60-pbs-qd.pdf",
+    pages: 4,
     x: 810,
     y: -40,
     summary:
-      "Combines passivation, annealing, and transport stack design into a stable high-responsivity quantum dot device route.",
-    topics: ["Quantum Dots", "Device Integration", "Stability"],
-    routeTags: ["Device Integration", "Charge Transport"],
+      "Introduces a bilayer LiF/C60 interface that improves charge extraction in inverted PbS quantum-dot photodetectors.",
+    topics: ["Quantum Dots", "Bilayer Interface", "Inverted Photodetectors"],
+    routeTags: ["Interface Engineering", "Charge Transport"],
     params: [
       {
         key: "responsivity",
@@ -325,6 +335,7 @@ function normalizeProject(project: Record<string, unknown>): ProjectRecord {
     id: String(project.id),
     name: String(project.name),
     user_id: String(project.user_id),
+    group_id: (project.group_id as string | null | undefined) || null,
     created_at: String(project.created_at),
     updated_at: String(project.updated_at),
   };
@@ -337,6 +348,7 @@ function buildSampleProject(userId = DEMO_USER_ID, projectId = DEMO_PROJECT_ID):
     id: projectId,
     name: SAMPLE_PROJECT_NAME,
     user_id: userId,
+    group_id: null,
     created_at: now,
     updated_at: now,
   };
@@ -356,9 +368,9 @@ function buildSampleNodes(projectId = DEMO_PROJECT_ID): PaperNodeRecord[] {
       venue: seed.venue,
       tech_route_tags: [...seed.routeTags],
       experimental_params: [...seed.params],
-      page_count: 12 + index,
-      original_file_name: `${seed.key}.pdf`,
-      pdf_url: null,
+      page_count: seed.pages,
+      original_file_name: seed.pdfFile,
+      pdf_url: `/demo-papers/${seed.pdfFile}`,
       cover_url: null,
       analysis: {
         key_points: [
@@ -375,7 +387,7 @@ function buildSampleNodes(projectId = DEMO_PROJECT_ID): PaperNodeRecord[] {
         model: "sample-seed",
       },
       document: {
-        page_count: 12 + index,
+        page_count: seed.pages,
         extracted_excerpt_length: 420,
       },
     };
@@ -395,11 +407,11 @@ function buildSampleNodes(projectId = DEMO_PROJECT_ID): PaperNodeRecord[] {
       position_y: seed.y,
       summary: seed.summary,
       analysis_error: null,
-      source_file_name: `${seed.key}.pdf`,
+      source_file_name: seed.pdfFile,
       source_file_path: null,
       source_mime_type: "application/pdf",
       file_size_bytes: 1800000 + index * 120000,
-      page_count: 12 + index,
+      page_count: seed.pages,
       source_excerpt:
         "Sample project excerpt: quantum dot methods, parameter extraction, semantic route tagging, and locked chain synthesis are preloaded for onboarding.",
       analysis_started_at: now,
@@ -455,20 +467,23 @@ export function getDemoPaperNodeDetail(projectId: string, nodeId: string): Paper
 
   return {
     ...node,
-    signed_file_url: null,
+    signed_file_url: node.metadata.pdf_url ?? null,
   };
 }
 
 async function attachPreviewUrl(node: PaperNodeRecord): Promise<PaperNodeRecord> {
-  const previewFileUrl = await createSignedFileUrl(node.source_file_path);
+  const [previewFileUrl, coverFileUrl] = await Promise.all([
+    createSignedFileUrl(node.source_file_path),
+    createSignedFileUrl(node.metadata.cover_file_path),
+  ]);
 
   return {
     ...node,
     preview_file_url: previewFileUrl,
     metadata: {
       ...node.metadata,
-      pdf_url: previewFileUrl,
-      cover_url: node.metadata.cover_url ?? null,
+      pdf_url: previewFileUrl ?? node.metadata.pdf_url ?? null,
+      cover_url: coverFileUrl ?? node.metadata.cover_url ?? null,
     },
   };
 }
@@ -761,12 +776,25 @@ function buildAdjacency(edges: PaperEdgeRecord[]) {
   return adjacency;
 }
 
+async function listGroupIdsForUser(userId: string) {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("group_members")
+    .select("group_id")
+    .eq("user_id", userId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data || []).map((item) => String(item.group_id));
+}
+
 async function getProjectForUserOrThrow(userId: string, projectId: string) {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("projects")
     .select(PROJECT_COLUMNS)
-    .eq("user_id", userId)
     .eq("id", projectId)
     .single();
 
@@ -774,15 +802,38 @@ async function getProjectForUserOrThrow(userId: string, projectId: string) {
     throw new Error(error?.message || `Project ${projectId} was not found.`);
   }
 
-  return normalizeProject(data as unknown as Record<string, unknown>);
+  const project = normalizeProject(data as unknown as Record<string, unknown>);
+
+  if (project.user_id === userId) {
+    return project;
+  }
+
+  if (project.group_id) {
+    const { data: member, error: memberError } = await supabase
+      .from("group_members")
+      .select("group_id")
+      .eq("group_id", project.group_id)
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (memberError) {
+      throw new Error(memberError.message);
+    }
+
+    if (member) {
+      return project;
+    }
+  }
+
+  throw new Error(`Project ${projectId} was not found.`);
 }
 
 async function getNodeForUserOrThrow(userId: string, projectId: string, nodeId: string) {
   const supabase = getSupabaseAdmin();
+  await getProjectForUserOrThrow(userId, projectId);
   const { data, error } = await supabase
     .from("nodes")
     .select(PAPER_NODE_COLUMNS)
-    .eq("user_id", userId)
     .eq("project_id", projectId)
     .eq("id", nodeId)
     .single();
@@ -823,9 +874,9 @@ async function ensureSampleProject(userId: string) {
       venue: seed.venue,
       tech_route_tags: [...seed.routeTags],
       experimental_params: [...seed.params],
-      page_count: 12 + index,
-      original_file_name: `${seed.key}.pdf`,
-      pdf_url: null,
+      page_count: seed.pages,
+      original_file_name: seed.pdfFile,
+      pdf_url: `/demo-papers/${seed.pdfFile}`,
       cover_url: null,
       analysis: {
         key_points: [
@@ -842,7 +893,7 @@ async function ensureSampleProject(userId: string) {
         model: "sample-seed",
       },
       document: {
-        page_count: 12 + index,
+        page_count: seed.pages,
         extracted_excerpt_length: 420,
       },
     };
@@ -861,11 +912,11 @@ async function ensureSampleProject(userId: string) {
       position_x: seed.x,
       position_y: seed.y,
       summary: seed.summary,
-      source_file_name: `${seed.key}.pdf`,
+      source_file_name: seed.pdfFile,
       source_file_path: null,
       source_mime_type: "application/pdf",
       file_size_bytes: 1800000 + index * 120000,
-      page_count: 12 + index,
+      page_count: seed.pages,
       source_excerpt:
         "Sample project excerpt: quantum dot methods, parameter extraction, semantic route tagging, and locked chain synthesis are preloaded for onboarding.",
       analysis_error: null,
@@ -906,35 +957,75 @@ async function ensureSampleProject(userId: string) {
 
 export async function listProjects(userId: string) {
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
+  const { data: ownedData, error: ownedError } = await supabase
     .from("projects")
     .select(PROJECT_COLUMNS)
     .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
-  if (error) {
-    throw new Error(error.message);
+  if (ownedError) {
+    throw new Error(ownedError.message);
   }
 
-  if ((data || []).length > 0) {
-    return (data || []).map((project) => normalizeProject(project as unknown as Record<string, unknown>));
+  const groupIds = await listGroupIdsForUser(userId);
+  const { data: groupData, error: groupError } =
+    groupIds.length > 0
+      ? await supabase
+          .from("projects")
+          .select(PROJECT_COLUMNS)
+          .in("group_id", groupIds)
+          .order("created_at", { ascending: true })
+      : { data: [], error: null };
+
+  if (groupError) {
+    throw new Error(groupError.message);
+  }
+
+  const projectMap = new Map<string, ProjectRecord>();
+  for (const project of [...(ownedData || []), ...(groupData || [])]) {
+    const normalized = normalizeProject(project as unknown as Record<string, unknown>);
+    projectMap.set(normalized.id, normalized);
+  }
+
+  const projects = [...projectMap.values()].sort(
+    (left, right) => new Date(left.created_at).getTime() - new Date(right.created_at).getTime(),
+  );
+
+  if (projects.length > 0) {
+    return projects;
   }
 
   return [await ensureSampleProject(userId)];
 }
 
-export async function createProject(userId: string, name: string) {
+export async function createProject(userId: string, name: string, groupId?: string | null) {
   const trimmedName = name.trim();
   if (!trimmedName) {
     throw new Error("Project name is required.");
   }
 
   const supabase = getSupabaseAdmin();
+  const normalizedGroupId = groupId?.trim() || null;
+
+  if (normalizedGroupId) {
+    const { data: group, error: groupError } = await supabase
+      .from("groups")
+      .select("id, owner_id")
+      .eq("id", normalizedGroupId)
+      .eq("owner_id", userId)
+      .single();
+
+    if (groupError || !group) {
+      throw new Error(groupError?.message || "Only the group owner can create group projects.");
+    }
+  }
+
   const { data, error } = await supabase
     .from("projects")
     .insert({
       user_id: userId,
       name: trimmedName,
+      group_id: normalizedGroupId,
     })
     .select(PROJECT_COLUMNS)
     .single();
@@ -952,7 +1043,6 @@ export async function listPaperNodes(userId: string, projectId: string) {
   const { data, error } = await supabase
     .from("nodes")
     .select(PAPER_NODE_COLUMNS)
-    .eq("user_id", userId)
     .eq("project_id", projectId)
     .order("updated_at", { ascending: false });
 
@@ -1003,9 +1093,9 @@ export async function getPaperNodeDetail(
     ...node,
     metadata: {
       ...node.metadata,
-      pdf_url: signed_file_url,
+      pdf_url: signed_file_url ?? node.metadata.pdf_url ?? null,
     },
-    signed_file_url,
+    signed_file_url: signed_file_url ?? node.metadata.pdf_url ?? null,
   };
 }
 
@@ -1013,7 +1103,10 @@ export async function createPaperNodeFromUpload(
   userId: string,
   projectId: string,
   file: File,
-  title?: string,
+  options: {
+    thumbnail?: File | null;
+    title?: string;
+  } = {},
 ) {
   await getProjectForUserOrThrow(userId, projectId);
 
@@ -1024,9 +1117,18 @@ export async function createPaperNodeFromUpload(
   const supabase = getSupabaseAdmin();
   const { bucket } = getSupabaseConfig();
   const fileBytes = new Uint8Array(await file.arrayBuffer());
-  const fallbackTitle = title?.trim() || stripPdfExtension(file.name);
+  const fallbackTitle = options.title?.trim() || stripPdfExtension(file.name);
   const parsedMeta = await extractPdfMetadata(fileBytes, fallbackTitle);
   const storagePath = `${userId}/${new Date().toISOString().slice(0, 10)}/${randomUUID()}-${sanitizeFileName(file.name)}`;
+  const thumbnailExtension =
+    options.thumbnail?.type === "image/png"
+      ? "png"
+      : options.thumbnail?.type === "image/jpeg"
+        ? "jpg"
+        : "webp";
+  const coverStoragePath = options.thumbnail
+    ? `${storagePath}.first-page.${thumbnailExtension}`
+    : null;
 
   const uploadResult = await supabase.storage.from(bucket).upload(storagePath, fileBytes, {
     contentType: file.type || "application/pdf",
@@ -1035,6 +1137,21 @@ export async function createPaperNodeFromUpload(
 
   if (uploadResult.error) {
     throw new Error(uploadResult.error.message);
+  }
+
+  if (options.thumbnail && coverStoragePath) {
+    const thumbnailBytes = new Uint8Array(await options.thumbnail.arrayBuffer());
+    const thumbnailUpload = await supabase.storage
+      .from(bucket)
+      .upload(coverStoragePath, thumbnailBytes, {
+        contentType: options.thumbnail.type || "image/webp",
+        upsert: false,
+      });
+
+    if (thumbnailUpload.error) {
+      await supabase.storage.from(bucket).remove([storagePath]);
+      throw new Error(thumbnailUpload.error.message);
+    }
   }
 
   const metadata: PaperMetadata = {
@@ -1051,6 +1168,7 @@ export async function createPaperNodeFromUpload(
     original_file_name: file.name,
     pdf_url: null,
     cover_url: null,
+    cover_file_path: coverStoragePath,
   };
 
   const { data, error } = await supabase
@@ -1075,7 +1193,9 @@ export async function createPaperNodeFromUpload(
     .single();
 
   if (error || !data) {
-    await supabase.storage.from(bucket).remove([storagePath]);
+    await supabase.storage
+      .from(bucket)
+      .remove(coverStoragePath ? [storagePath, coverStoragePath] : [storagePath]);
     throw new Error(error?.message || "Failed to create paper node.");
   }
 
@@ -1103,7 +1223,6 @@ async function persistTimelineLayout(userId: string, projectId: string, forceRef
           position_x: position.x,
           position_y: position.y,
         })
-        .eq("user_id", userId)
         .eq("project_id", projectId)
         .eq("id", nodeId),
     ),
@@ -1238,7 +1357,6 @@ export async function startPaperAnalysis(userId: string, projectId: string, node
       analysis_completed_at: null,
       analysis_attempt_count: existing.analysis_attempt_count + 1,
     })
-    .eq("user_id", userId)
     .eq("project_id", projectId)
     .eq("id", nodeId)
     .select(PAPER_NODE_COLUMNS)
@@ -1261,7 +1379,6 @@ async function markPaperAnalysisFailed(userId: string, projectId: string, nodeId
       analysis_error: reason.slice(0, 1000),
       analysis_completed_at: new Date().toISOString(),
     })
-    .eq("user_id", userId)
     .eq("project_id", projectId)
     .eq("id", nodeId);
 }
@@ -1317,7 +1434,7 @@ export async function runPaperAnalysis(userId: string, projectId: string, nodeId
       experimental_params: analysis.experimentalParams,
       page_count: extracted.pageCount,
       pdf_url: null,
-      cover_url: node.metadata.cover_url ?? null,
+      cover_url: node.metadata.cover_file_path ? null : node.metadata.cover_url ?? null,
       original_file_name: node.source_file_name,
       analysis: {
         key_points: analysis.keyPoints,
@@ -1361,7 +1478,6 @@ export async function runPaperAnalysis(userId: string, projectId: string, nodeId
         is_academic: analysis.isAcademic,
         publication_year: resolvedPublicationYear,
       })
-      .eq("user_id", userId)
       .eq("project_id", projectId)
       .eq("id", nodeId);
 

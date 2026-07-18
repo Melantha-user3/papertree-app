@@ -1,5 +1,5 @@
 const CACHE_NAME = "papertree-shell-v1";
-const SHELL_ASSETS = ["/", "/login", "/papertree-icon.svg"];
+const SHELL_ASSETS = ["/", "/login", "/papertree-app-icon.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

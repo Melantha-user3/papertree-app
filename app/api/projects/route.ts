@@ -31,14 +31,14 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const user = await requireAuthenticatedUser();
-    const body = (await request.json()) as { name?: string };
+    const body = (await request.json()) as { groupId?: string | null; name?: string };
     const name = body.name?.trim();
 
     if (!name) {
       return NextResponse.json({ error: "Missing project name." }, { status: 400 });
     }
 
-    const project = await createProject(user.id, name);
+    const project = await createProject(user.id, name, body.groupId);
     return NextResponse.json({ project }, { status: 201 });
   } catch (error) {
     if (isAuthenticationError(error)) {

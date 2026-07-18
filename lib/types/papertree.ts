@@ -44,6 +44,7 @@ export interface PaperMetadata extends JsonObject {
   page_count?: number | null;
   pdf_url?: string | null;
   cover_url?: string | null;
+  cover_file_path?: string | null;
   original_file_name?: string | null;
   analysis?: {
     key_points?: string[];
@@ -107,8 +108,30 @@ export interface ProjectRecord {
   id: string;
   name: string;
   user_id: string;
+  group_id?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export type GroupMemberRole = "owner" | "member";
+
+export interface GroupRecord {
+  id: string;
+  name: string;
+  owner_id: string;
+  description?: string | null;
+  invite_code: string;
+  role: GroupMemberRole;
+  member_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GroupMemberRecord {
+  group_id: string;
+  user_id: string;
+  role: GroupMemberRole;
+  joined_at: string;
 }
 
 export interface SynthesisCitation {

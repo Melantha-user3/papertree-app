@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { Viewport } from "@xyflow/react";
 import type {
   PaperEdgeRecord,
+  GroupRecord,
   PaperNodeDetailRecord,
   PaperNodeRecord,
   ProjectRecord,
@@ -16,6 +17,7 @@ interface PanelState {
 
 interface PaperTreeState {
   projects: ProjectRecord[];
+  groups: GroupRecord[];
   currentProjectId: string | null;
   nodes: PaperNodeRecord[];
   edges: PaperEdgeRecord[];
@@ -37,7 +39,14 @@ interface PaperTreeState {
   isGeneratingSynthesis: boolean;
   errorMessage: string | null;
   selectionLog: SelectionLogEntry[];
+
+  // === Canvas Interaction MVP additions ===
+  efficiencyMin: number;
+  efficiencyMax: number;
+  recentlyPulsedEdgeKey: string | null; // for magnetic lock animation
+
   setProjects: (projects: ProjectRecord[]) => void;
+  setGroups: (groups: GroupRecord[]) => void;
   setCurrentProjectId: (projectId: string | null) => void;
   setNodes: (nodes: PaperNodeRecord[]) => void;
   setEdges: (edges: PaperEdgeRecord[]) => void;
@@ -58,6 +67,10 @@ interface PaperTreeState {
   setIsGeneratingSynthesis: (value: boolean) => void;
   setErrorMessage: (message: string | null) => void;
   pushSelectionLog: (entry: SelectionLogEntry) => void;
+
+  // === Canvas Interaction MVP ===
+  setEfficiencyRange: (min: number, max: number) => void;
+  pulseEdge: (sourceId: string, targetId: string) => void;
 }
 
 function findPdfUrl(nodes: PaperNodeRecord[], nodeId: string | null): string | null {
@@ -68,6 +81,7 @@ function findPdfUrl(nodes: PaperNodeRecord[], nodeId: string | null): string | n
 
 export const usePaperTreeStore = create<PaperTreeState>((set) => ({
   projects: [],
+  groups: [],
   currentProjectId: null,
   nodes: [],
   edges: [],
@@ -89,7 +103,13 @@ export const usePaperTreeStore = create<PaperTreeState>((set) => ({
   isGeneratingSynthesis: false,
   errorMessage: null,
   selectionLog: [],
+
+  // === Canvas Interaction MVP ===
+  efficiencyMin: 0,
+  efficiencyMax: 30,
+  recentlyPulsedEdgeKey: null,
   setProjects: (projects) => set({ projects }),
+  setGroups: (groups) => set({ groups }),
   setCurrentProjectId: (currentProjectId) =>
     set({
       currentProjectId,
@@ -142,4 +162,16 @@ export const usePaperTreeStore = create<PaperTreeState>((set) => ({
   setIsGeneratingSynthesis: (isGeneratingSynthesis) => set({ isGeneratingSynthesis }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   pushSelectionLog: (entry) => set((state) => ({ selectionLog: [...state.selectionLog, entry] })),
+
+  // === Canvas Interaction MVP actions ===
+  setEfficiencyRange: (min, max) => set({ efficiencyMin: min, efficiencyMax: max }),
+  pulseEdge: (sourceId, targetId) => {
+    const key = `${sourceId}-${targetId}`;
+    set({ recentlyPulsedEdgeKey: key });
+    // Clear the pulse after animation duration
+    setTimeout(() => {
+      // Only clear if it's still the same pulse (avoid race conditions)
+      set((state) => (state.recentlyPulsedEdgeKey === key ? { recentlyPulsedEdgeKey: null } : {}));
+    }, 650);
+  },
 }));

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PaperTree 2.0 Release Poster</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body {
+        background: #f7f9fc;
+        color: #101828;
+        font-family:
+          Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      .poster {
+        position: relative;
+        width: 1600px;
+        height: 1000px;
+        overflow: hidden;
+        background: #f8fafc;
+      }
+
+      .poster::before {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.48)),
+          url("/release-assets/papertree-release-background.png") center / cover no-repeat;
+        content: "";
+      }
+
+      .topbar,
+      .intro,
+      .features,
+      .product,
+      .collection,
+      .footer {
+        position: absolute;
+        z-index: 1;
+      }
+
+      .topbar {
+        top: 42px;
+        left: 64px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo {
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+      }
+
+      .brand {
+        font-size: 17px;
+        font-weight: 750;
+        letter-spacing: 0;
+      }
+
+      .company {
+        margin-top: 3px;
+        color: #667085;
+        font-size: 11px;
+      }
+
+      .version {
+        margin-left: 12px;
+        border: 1px solid rgba(37, 99, 235, 0.18);
+        border-radius: 999px;
+        background: rgba(239, 246, 255, 0.9);
+        padding: 7px 12px;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .intro {
+        top: 126px;
+        left: 68px;
+        width: 850px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: #2563eb;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      h1 {
+        max-width: 820px;
+        margin: 0;
+        font-size: 54px;
+        font-weight: 720;
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .subhead {
+        max-width: 760px;
+        margin: 18px 0 0;
+        color: #475467;
+        font-size: 19px;
+        line-height: 1.55;
+      }
+
+      .features {
+        top: 130px;
+        right: 70px;
+        width: 465px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .feature {
+        display: grid;
+        grid-template-columns: 30px 1fr;
+        gap: 12px;
+        align-items: start;
+        border-left: 2px solid #bfdbfe;
+        padding: 2px 0 3px 14px;
+      }
+
+      .feature-index {
+        color: #2563eb;
+        font-family: ui-monospace, "SFMono-Regular", monospace;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .feature strong {
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .feature span {
+        display: block;
+        margin-top: 3px;
+        color: #667085;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .product {
+        left: 68px;
+        bottom: 50px;
+        width: 1110px;
+        height: 555px;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 34px 90px rgba(15, 23, 42, 0.18);
+      }
+
+      .window-bar {
+        display: flex;
+        height: 34px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #e5e7eb;
+        background: #fff;
+        padding: 0 12px;
+      }
+
+      .dots {
+        display: flex;
+        gap: 6px;
+      }
+
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: #d0d5dd;
+      }
+
+      .window-label {
+        color: #98a2b3;
+        font-family: ui-monospace, "SFMono-Regular", monospace;
+        font-size: 9px;
+      }
+
+      .product img {
+        display: block;
+        width: 100%;
+        height: calc(100% - 34px);
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .collection {
+        right: 62px;
+        bottom: 94px;
+        width: 480px;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 26px 70px rgba(15, 23, 42, 0.22);
+        transform: rotate(1.2deg);
+      }
+
+      .collection img {
+        display: block;
+        width: 100%;
+      }
+
+      .collection-label {
+        position: absolute;
+        right: 82px;
+        bottom: 548px;
+        z-index: 3;
+        border-radius: 999px;
+        background: #2563eb;
+        padding: 8px 13px;
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        box-shadow: 0 8px 22px rgba(37, 99, 235, 0.25);
+      }
+
+      .footer {
+        right: 64px;
+        bottom: 42px;
+        color: #667085;
+        font-size: 11px;
+        text-align: right;
+      }
+
+      .footer strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #344054;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="poster">
+      <div class="topbar">
+        <img class="logo" src="/papertree-app-icon.png" alt="" />
+        <div>
+          <div class="brand">PaperTree</div>
+          <div class="company">深圳市迈米尔科技有限公司 · MIMIRtech</div>
+        </div>
+        <div class="version">Research Workspace 2.0</div>
+      </div>
+
+      <section class="intro">
+        <p class="eyebrow">全新版本现已完成</p>
+        <h1>让每一篇论文，都成为清晰可见的研究路径</h1>
+        <p class="subhead">
+          从真实 PDF 首页、可滑动论文卡组，到共享 Group 工作区。PaperTree
+          正在把分散的阅读过程，整理成一张可以协作、追踪和继续生长的知识地图。
+        </p>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <div class="feature-index">01</div>
+          <div>
+            <strong>真实 PDF 首页</strong>
+            <span>Graph 与卡组统一使用论文第一页，不再依赖虚构封面。</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-index">02</div>
+          <div>
+            <strong>滑动式论文卡组</strong>
+            <span>像翻阅照片与扑克牌一样浏览、归类并打开论文。</span>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-index">03</div>
+          <div>
+            <strong>Group 共享阅读</strong>
+            <span>创建、邀请、加入共享研究空间，老师与学生使用同一套画布。</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="product">
+        <div class="window-bar">
+          <div class="dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="window-label">PAPERTREE / SEMANTIC GRAPH</div>
+        </div>
+        <img src="/release-assets/papertree-v2-graph.png" alt="" />
+      </section>
+
+      <div class="collection-label">Swipeable paper deck</div>
+      <section class="collection">
+        <img src="/release-assets/papertree-v2-collection.png" alt="" />
+      </section>
+
+      <div class="footer">
+        <strong>Built for research that keeps moving.</strong>
+        PaperTree · Developed by MIMIRtech
+      </div>
+    </main>
+  </body>
+</html>

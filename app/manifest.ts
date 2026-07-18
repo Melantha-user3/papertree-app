@@ -9,20 +9,20 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     background_color: "#f8fafc",
-    theme_color: "#0f766e",
+    theme_color: "#2563eb",
     categories: ["education", "productivity", "utilities"],
     icons: [
       {
-        src: "/icon",
-        sizes: "192x192",
+        src: "/papertree-app-icon.png",
+        sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/apple-icon",
+        src: "/apple-icon.png",
         sizes: "180x180",
         type: "image/png",
-        purpose: "maskable",
+        purpose: "any",
       },
     ],
   };

@@ -10,6 +10,7 @@ interface LoginPageProps {
     error?: string;
     message?: string;
     mode?: string;
+    next?: string;
   }>;
 }
 
@@ -25,9 +26,9 @@ function ModeButton({
   return (
     <Link
       href={href}
-      className={`rounded-full px-3 py-1 text-xs uppercase tracking-[0.16em] ${
+      className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
         active
-          ? "bg-teal-600 text-white"
+          ? "bg-blue-600 text-white"
           : "bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
       }`}
     >
@@ -37,14 +38,17 @@ function ModeButton({
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  const next =
+    params.next?.startsWith("/") && !params.next.startsWith("//") ? params.next : "/canvas";
   const user = await getAuthenticatedUser();
 
   if (user) {
-    redirect("/canvas");
+    redirect(next);
   }
 
-  const params = await searchParams;
   const mode = params.mode === "signup" ? "signup" : "signin";
+  const nextQuery = next === "/canvas" ? "" : `&next=${encodeURIComponent(next)}`;
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6">
@@ -52,7 +56,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(13,148,136,0.12),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_30%)]" />
           <div className="relative">
-            <p className="text-xs uppercase tracking-[0.24em] text-teal-700">PaperTree</p>
+            <p className="text-xs font-semibold text-blue-700">PaperTree</p>
             <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
               Create a private workspace when you are ready to upload your own PDFs.
             </h1>
@@ -90,15 +94,19 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <PaperTreeMark className="h-10 w-10" />
               <div>
                 <p className="text-sm font-semibold text-slate-950">PaperTree</p>
-                <p className="text-xs text-slate-500">Alpha research workspace</p>
+                <p className="text-xs text-slate-500">A MIMIRtech research workspace</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <ModeButton active={mode === "signin"} href="/login?mode=signin" label="Sign In" />
+              <ModeButton
+                active={mode === "signin"}
+                href={`/login?mode=signin${nextQuery}`}
+                label="Sign In"
+              />
               <ModeButton
                 active={mode === "signup"}
-                href="/login?mode=signup"
+                href={`/login?mode=signup${nextQuery}`}
                 label="Create Account"
               />
             </div>
@@ -124,7 +132,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               </div>
             ) : null}
 
-            <AuthForm action={mode === "signup" ? signup : login} mode={mode} />
+            <AuthForm
+              action={mode === "signup" ? signup : login}
+              mode={mode}
+              nextPath={next}
+            />
           </div>
         </section>
       </div>

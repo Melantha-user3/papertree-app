@@ -1,9 +1,9 @@
 import type { PaperEdgeRecord, PaperNodeRecord } from "@/lib/types/papertree";
 
 const YEAR_SPACING = 500;
-const LANE_SPACING = 340;
-const LANE_CLUSTER_OFFSET = 120;
-const BRANCH_OFFSET = 200;
+const LANE_SPACING = 520;
+const LANE_CLUSTER_OFFSET = 210;
+const BRANCH_OFFSET = 430;
 const UNKNOWN_YEAR_X = -440;
 const DEFAULT_Y = 120;
 

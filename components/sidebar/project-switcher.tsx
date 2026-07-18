@@ -30,13 +30,37 @@ export function ProjectSwitcher({
   }
 
   return (
-    <div className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-      <div className="flex items-center gap-2">
-        <FolderGit2 className="h-4 w-4 text-teal-600" />
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-600">Project</p>
+    <section className="space-y-2.5">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <FolderGit2 className="h-3.5 w-3.5 text-blue-500" />
+          <p className="text-[11px] font-medium text-slate-500">Project</p>
+        </div>
+        <div className="flex items-center">
+          <button
+            type="button"
+            className="grid h-7 w-7 place-items-center rounded-lg text-slate-400 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={readOnly}
+            onClick={handleCreateProject}
+            aria-label="Create project"
+            title="Create project"
+          >
+            <Plus className="h-3.5 w-3.5" />
+          </button>
+          <button
+            type="button"
+            className="grid h-7 w-7 place-items-center rounded-lg text-slate-400 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={readOnly}
+            onClick={onRelayout}
+            aria-label="Relayout project"
+            title="Relayout project"
+          >
+            <WandSparkles className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
       <select
-        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-teal-300"
+        className="h-9 w-full rounded-lg border border-slate-200 bg-white px-2.5 text-xs text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
         value={currentProjectId ?? ""}
         onChange={(event) => onChangeProject(event.target.value)}
       >
@@ -46,26 +70,6 @@ export function ProjectSwitcher({
           </option>
         ))}
       </select>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
-          disabled={readOnly}
-          onClick={handleCreateProject}
-        >
-          <Plus className="h-4 w-4" />
-          New
-        </button>
-        <button
-          type="button"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100"
-          disabled={readOnly}
-          onClick={onRelayout}
-        >
-          <WandSparkles className="h-4 w-4" />
-          Relayout
-        </button>
-      </div>
-    </div>
+    </section>
   );
 }
