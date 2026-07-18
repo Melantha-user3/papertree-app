@@ -26,15 +26,26 @@ export function PdfFirstPageThumbnail({
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const renderCanvas = document.createElement("canvas");
     let cancelled = false;
 
     if (!canvas) {
       return;
     }
 
-    void renderPdfFirstPageToCanvas(src, canvas, targetWidth)
+    void renderPdfFirstPageToCanvas(src, renderCanvas, targetWidth)
       .then(() => {
         if (!cancelled) {
+          const context = canvas.getContext("2d", { alpha: false });
+
+          if (!context) {
+            throw new Error("Canvas rendering is unavailable.");
+          }
+
+          canvas.width = renderCanvas.width;
+          canvas.height = renderCanvas.height;
+          canvas.style.aspectRatio = renderCanvas.style.aspectRatio;
+          context.drawImage(renderCanvas, 0, 0);
           setRenderState({ key: renderKey, status: "ready" });
         }
       })

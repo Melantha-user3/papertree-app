@@ -13,6 +13,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "test:groups:live": "PAPERTREE_LIVE_TEST=1 node --env-file=.env.local scripts/live-group-smoke.mjs",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "verify": "npm run lint && npm run build",

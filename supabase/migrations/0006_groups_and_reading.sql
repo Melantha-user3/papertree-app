@@ -11,7 +11,7 @@ create table if not exists groups (
   owner_id uuid not null references auth.users(id) on delete cascade,
   name text not null check (char_length(trim(name)) > 0),
   description text,
-  invite_code text not null unique default encode(gen_random_bytes(8), 'hex'),
+  invite_code text not null unique default encode(extensions.gen_random_bytes(8), 'hex'),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -69,6 +69,26 @@ create index if not exists idx_paper_comments_node_created_at on paper_comments(
 create index if not exists idx_paper_read_progress_project_user on paper_read_progress(project_id, user_id);
 create index if not exists idx_paper_read_sessions_project_node on paper_read_sessions(project_id, node_id, created_at desc);
 
+create or replace function is_group_member(
+  target_group_id uuid,
+  target_user_id uuid default auth.uid()
+) returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.group_members
+    where group_id = target_group_id
+      and user_id = target_user_id
+  );
+$$;
+
+revoke all on function is_group_member(uuid, uuid) from public;
+grant execute on function is_group_member(uuid, uuid) to authenticated;
+
 create or replace function set_groups_updated_at() returns trigger
 language plpgsql as $$
 begin
@@ -124,12 +144,7 @@ for select
 to authenticated
 using (
   owner_id = (select auth.uid())
-  or exists (
-    select 1
-    from group_members gm
-    where gm.group_id = groups.id
-      and gm.user_id = (select auth.uid())
-  )
+  or is_group_member(id)
 );
 
 drop policy if exists "Users can create owned groups" on groups;
@@ -161,12 +176,7 @@ for select
 to authenticated
 using (
   user_id = (select auth.uid())
-  or exists (
-    select 1
-    from group_members viewer
-    where viewer.group_id = group_members.group_id
-      and viewer.user_id = (select auth.uid())
-  )
+  or is_group_member(group_id)
 );
 
 drop policy if exists "Users can join as themselves" on group_members;
@@ -174,7 +184,15 @@ create policy "Users can join as themselves"
 on group_members
 for insert
 to authenticated
-with check (user_id = (select auth.uid()));
+with check (
+  user_id = (select auth.uid())
+  and exists (
+    select 1
+    from groups g
+    where g.id = group_id
+      and g.owner_id = (select auth.uid())
+  )
+);
 
 drop policy if exists "Owners can manage group members" on group_members;
 create policy "Owners can manage group members"
